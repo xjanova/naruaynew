@@ -7,7 +7,7 @@
         "dev": "vite"
     },
     "devDependencies": {
-        "@headlessui/react": "^2.0.0",
+        "@headlessui/react": "^2.2.9",
         "@inertiajs/react": "^2.0.0",
         "@tailwindcss/forms": "^0.5.3",
         "@tailwindcss/vite": "^4.0.0",
@@ -25,5 +25,15 @@
         "tailwindcss": "^3.2.1",
         "typescript": "^5.0.2",
         "vite": "^7.0.7"
+    },
+    "dependencies": {
+        "@heroicons/react": "^2.2.0",
+        "@xyflow/react": "^12.10.1",
+        "clsx": "^2.1.1",
+        "framer-motion": "^12.35.2",
+        "lucide-react": "^0.577.0",
+        "react-d3-tree": "^3.6.6",
+        "recharts": "^3.8.0",
+        "tailwind-merge": "^3.5.0"
     }
 }
