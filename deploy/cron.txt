@@ -1,0 +1,19 @@
+# Naruay MLM — Cron Jobs
+# Add via DirectAdmin → Cron Jobs หรือ crontab -e
+#
+# Replace:
+#   DEPLOY_USER  → DirectAdmin username
+#   example.com  → domain
+#   php83        → PHP version path
+
+# Laravel Scheduler (ทุกนาที)
+* * * * * /usr/local/bin/php83 /home/DEPLOY_USER/domains/example.com/laravel/current/artisan schedule:run >> /dev/null 2>&1
+
+# Clear expired cache (ทุกวัน ตี 2)
+0 2 * * * /usr/local/bin/php83 /home/DEPLOY_USER/domains/example.com/laravel/current/artisan cache:prune-stale-tags >> /dev/null 2>&1
+
+# Rotate logs (ทุกสัปดาห์ วันจันทร์ ตี 3)
+0 3 * * 1 find /home/DEPLOY_USER/domains/example.com/laravel/shared/storage/logs -name "*.log" -mtime +30 -delete >> /dev/null 2>&1
+
+# Check queue health (ทุก 5 นาที)
+*/5 * * * * /usr/local/bin/php83 /home/DEPLOY_USER/domains/example.com/laravel/current/artisan queue:monitor redis:default,redis:commissions --max=100 >> /dev/null 2>&1
