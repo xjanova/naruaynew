@@ -39,18 +39,17 @@ class ProductController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'category_id' => 'required|exists:product_categories,id',
-            'sku' => 'nullable|string|unique:products',
+            'sku' => 'required|string|unique:products',
+            'type' => 'required|in:registration,repurchase',
             'price' => 'required|numeric|min:0',
-            'pv' => 'required|numeric|min:0',
-            'cv' => 'nullable|numeric|min:0',
-            'sp' => 'nullable|numeric|min:0',
+            'pv_value' => 'required|numeric|min:0',
+            'bv_value' => 'nullable|numeric|min:0',
+            'referral_commission' => 'nullable|numeric|min:0',
+            'product_validity_days' => 'nullable|integer|min:0',
             'description' => 'nullable|string',
-            'stock' => 'integer|min:0',
             'is_active' => 'boolean',
-            'is_registration_package' => 'boolean',
         ]);
 
-        $validated['slug'] = Str::slug($validated['name']);
         Product::create($validated);
 
         return redirect()->route('admin.products.index')
@@ -70,15 +69,15 @@ class ProductController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'category_id' => 'required|exists:product_categories,id',
-            'sku' => 'nullable|string|unique:products,sku,' . $product->id,
+            'sku' => 'required|string|unique:products,sku,' . $product->id,
+            'type' => 'required|in:registration,repurchase',
             'price' => 'required|numeric|min:0',
-            'pv' => 'required|numeric|min:0',
-            'cv' => 'nullable|numeric|min:0',
-            'sp' => 'nullable|numeric|min:0',
+            'pv_value' => 'required|numeric|min:0',
+            'bv_value' => 'nullable|numeric|min:0',
+            'referral_commission' => 'nullable|numeric|min:0',
+            'product_validity_days' => 'nullable|integer|min:0',
             'description' => 'nullable|string',
-            'stock' => 'integer|min:0',
             'is_active' => 'boolean',
-            'is_registration_package' => 'boolean',
         ]);
 
         $product->update($validated);

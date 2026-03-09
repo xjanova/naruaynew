@@ -27,7 +27,7 @@ use App\Http\Middleware\ActiveMemberMiddleware;
 
 Route::get('/', function () {
     if (auth()->check()) {
-        return auth()->user()->user_type === 'admin'
+        return auth()->user()->user_level === 0
             ? redirect()->route('admin.dashboard')
             : redirect()->route('user.dashboard');
     }

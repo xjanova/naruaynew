@@ -15,32 +15,23 @@ class LegDetail extends Model
 
     protected $fillable = [
         'user_id',
-        'left_count', 'right_count',
-        'left_active_count', 'right_active_count',
-        'left_pv', 'right_pv',
-        'left_carry', 'right_carry',
-        'left_total_pv', 'right_total_pv',
         'total_left_count', 'total_right_count',
-        'total_left_active_count', 'total_right_active_count',
+        'total_left_carry', 'total_right_carry',
+        'total_active', 'total_inactive',
+        'left_carry_forward', 'right_carry_forward',
     ];
 
     protected function casts(): array
     {
         return [
-            'left_count' => 'integer',
-            'right_count' => 'integer',
-            'left_active_count' => 'integer',
-            'right_active_count' => 'integer',
-            'left_pv' => 'decimal:2',
-            'right_pv' => 'decimal:2',
-            'left_carry' => 'decimal:2',
-            'right_carry' => 'decimal:2',
-            'left_total_pv' => 'decimal:2',
-            'right_total_pv' => 'decimal:2',
             'total_left_count' => 'integer',
             'total_right_count' => 'integer',
-            'total_left_active_count' => 'integer',
-            'total_right_active_count' => 'integer',
+            'total_left_carry' => 'decimal:2',
+            'total_right_carry' => 'decimal:2',
+            'total_active' => 'integer',
+            'total_inactive' => 'integer',
+            'left_carry_forward' => 'decimal:2',
+            'right_carry_forward' => 'decimal:2',
         ];
     }
 

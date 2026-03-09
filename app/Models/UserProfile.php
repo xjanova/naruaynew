@@ -12,11 +12,13 @@ class UserProfile extends Model
     protected $fillable = [
         'user_id',
         // Address fields
-        'address', 'address2', 'city', 'state', 'zip', 'country',
+        'address', 'address2', 'city', 'state', 'country', 'postal_code',
         // Banking fields
-        'bank_name', 'branch_name', 'account_holder', 'account_number', 'ifsc_code', 'pan_number',
+        'bank_name', 'account_number', 'account_holder_name', 'ifsc_code', 'pan_number',
+        // Payout preference
+        'payout_type',
         // Social / additional fields
-        'facebook', 'twitter', 'instagram', 'linkedin', 'telegram', 'whatsapp',
+        'facebook', 'line_token', 'line_userid',
     ];
 
     protected function casts(): array

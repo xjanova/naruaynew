@@ -86,17 +86,20 @@ class BinaryTreeService
         DB::table('tree_paths')->insert([
             'ancestor' => $user->id,
             'descendant' => $user->id,
+            'depth' => 0,
         ]);
 
         if ($user->placement_id) {
-            // Copy ancestor paths from placement parent
+            // Copy ancestor paths from placement parent, incrementing depth
             $ancestorPaths = DB::table('tree_paths')
                 ->where('descendant', $user->placement_id)
-                ->pluck('ancestor');
+                ->select('ancestor', 'depth')
+                ->get();
 
-            $inserts = $ancestorPaths->map(fn($ancestorId) => [
-                'ancestor' => $ancestorId,
+            $inserts = $ancestorPaths->map(fn($path) => [
+                'ancestor' => $path->ancestor,
                 'descendant' => $user->id,
+                'depth' => $path->depth + 1,
             ])->toArray();
 
             if (!empty($inserts)) {
@@ -111,17 +114,20 @@ class BinaryTreeService
         DB::table('sponsor_tree_paths')->insert([
             'ancestor' => $user->id,
             'descendant' => $user->id,
+            'depth' => 0,
         ]);
 
         if ($user->sponsor_id) {
-            // Copy ancestor paths from sponsor
+            // Copy ancestor paths from sponsor, incrementing depth
             $ancestorPaths = DB::table('sponsor_tree_paths')
                 ->where('descendant', $user->sponsor_id)
-                ->pluck('ancestor');
+                ->select('ancestor', 'depth')
+                ->get();
 
-            $inserts = $ancestorPaths->map(fn($ancestorId) => [
-                'ancestor' => $ancestorId,
+            $inserts = $ancestorPaths->map(fn($path) => [
+                'ancestor' => $path->ancestor,
                 'descendant' => $user->id,
+                'depth' => $path->depth + 1,
             ])->toArray();
 
             if (!empty($inserts)) {

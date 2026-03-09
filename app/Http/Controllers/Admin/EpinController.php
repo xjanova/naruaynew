@@ -13,12 +13,9 @@ class EpinController extends Controller
 {
     public function index(Request $request)
     {
-        $epins = Epin::with(['allocatedTo:id,username', 'usedBy:id,username'])
+        $epins = Epin::with(['owner:id,username', 'usedBy:id,username', 'product:id,name'])
             ->when($request->status, function ($q, $s) {
-                if ($s === 'available') $q->where('status', 'active')->whereNull('allocated_to');
-                elseif ($s === 'allocated') $q->whereNotNull('allocated_to')->where('status', 'active');
-                elseif ($s === 'used') $q->where('status', 'used');
-                elseif ($s === 'expired') $q->where('status', 'expired');
+                $q->where('status', $s);
             })
             ->latest()
             ->paginate(50)
@@ -27,7 +24,7 @@ class EpinController extends Controller
         return Inertia::render('Admin/Epins/Index', [
             'epins' => $epins,
             'filters' => $request->only(['status']),
-            'configs' => EpinConfig::where('is_active', true)->get(),
+            'configs' => EpinConfig::with('product:id,name')->where('is_active', true)->get(),
         ]);
     }
 
@@ -40,14 +37,17 @@ class EpinController extends Controller
 
         $config = EpinConfig::findOrFail($request->config_id);
         $epins = [];
+        $adminId = auth()->id();
 
         for ($i = 0; $i < $request->quantity; $i++) {
             $epins[] = [
-                'code' => strtoupper(Str::random(4) . '-' . Str::random(4) . '-' . Str::random(4)),
+                'pin_number' => strtoupper(Str::random(4) . '-' . Str::random(4) . '-' . Str::random(4) . '-' . Str::random(4)),
                 'amount' => $config->amount,
-                'pv' => $config->pv,
-                'status' => 'active',
-                'expires_at' => $config->validity_days ? now()->addDays($config->validity_days) : null,
+                'product_id' => $config->product_id,
+                'generated_by' => $adminId,
+                'owned_by' => $adminId,
+                'status' => 'available',
+                'expires_at' => now()->addYear(),
                 'created_at' => now(),
                 'updated_at' => now(),
             ];

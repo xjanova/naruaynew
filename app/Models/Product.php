@@ -10,16 +10,23 @@ class Product extends Model
     use HasFactory;
 
     protected $fillable = [
-        'product_category_id',
+        'legacy_id',
         'name',
-        'slug',
-        'description',
-        'image',
+        'sku',
+        'type',
         'price',
         'pv_value',
         'bv_value',
-        'validity_days',
-        'sort_order',
+        'referral_commission',
+        'pair_price',
+        'roi_percent',
+        'roi_days',
+        'subscription_period',
+        'product_validity_days',
+        'category_id',
+        'description',
+        'image',
+        'tree_icon',
         'is_active',
     ];
 
@@ -29,19 +36,28 @@ class Product extends Model
             'price' => 'decimal:2',
             'pv_value' => 'decimal:2',
             'bv_value' => 'decimal:2',
-            'validity_days' => 'integer',
-            'sort_order' => 'integer',
+            'referral_commission' => 'decimal:2',
+            'pair_price' => 'decimal:2',
+            'roi_percent' => 'decimal:2',
+            'roi_days' => 'integer',
+            'subscription_period' => 'integer',
+            'product_validity_days' => 'integer',
             'is_active' => 'boolean',
         ];
     }
 
     public function category()
     {
-        return $this->belongsTo(ProductCategory::class, 'product_category_id');
+        return $this->belongsTo(ProductCategory::class, 'category_id');
     }
 
     public function users()
     {
         return $this->hasMany(User::class);
+    }
+
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class);
     }
 }

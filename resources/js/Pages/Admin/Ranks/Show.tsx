@@ -17,7 +17,7 @@ export default function RankShow({ rank, members, recentPromotions }: Props) {
                 <div className="flex items-center justify-between">
                     <div>
                         <h1 className="text-2xl font-bold text-white">{rank.name}</h1>
-                        <p className="text-white/40 mt-1">Level {rank.order} · {members.total} members</p>
+                        <p className="text-white/40 mt-1">Rank #{rank.id} · {members.total} members</p>
                     </div>
                     <Link href="/admin/ranks" className="text-sm text-white/40 hover:text-white">← Back</Link>
                 </div>
