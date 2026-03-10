@@ -22,16 +22,26 @@ use App\Http\Controllers\User\ProfileController as UserProfileController;
 use App\Http\Controllers\User\ShopController;
 use App\Http\Controllers\User\RegisterMemberController;
 
+use App\Http\Controllers\SetupController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\ActiveMemberMiddleware;
+use App\Http\Middleware\SetupMiddleware;
 
-Route::get('/', function () {
-    if (auth()->check()) {
-        return auth()->user()->user_level === 0
-            ? redirect()->route('admin.dashboard')
-            : redirect()->route('user.dashboard');
-    }
-    return inertia('Welcome');
+// ─── Setup Wizard (first-run only) ──────────────────
+Route::middleware(SetupMiddleware::class)->group(function () {
+    Route::get('/', function () {
+        if (auth()->check()) {
+            return auth()->user()->user_level === 0
+                ? redirect()->route('admin.dashboard')
+                : redirect()->route('user.dashboard');
+        }
+        return inertia('Welcome');
+    });
+
+    Route::get('/setup', [SetupController::class, 'index'])->name('setup');
+    Route::post('/setup/migrate', [SetupController::class, 'runMigrations'])->name('setup.migrate');
+    Route::post('/setup/seed', [SetupController::class, 'runSeeders'])->name('setup.seed');
+    Route::post('/setup/admin', [SetupController::class, 'createAdmin'])->name('setup.admin');
 });
 
 // ─── Admin Routes ─────────────────────────────────────
